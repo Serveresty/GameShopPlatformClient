@@ -1,9 +1,0 @@
-# ninja log v6
-40	284	7516405525970092	GameShopPlatformClient_autogen/timestamp_Debug	a898950da96ace42
-1443	4337	7516404947521452	CMakeFiles/GameShopPlatformClient.dir/Debug/GameShopPlatformClient_autogen/mocs_compilation_Debug.cpp.obj	1696194ccc242dbb
-40	284	7516405525970092	GameShopPlatformClient_autogen/mocs_compilation_Debug.cpp	a898950da96ace42
-40	284	7516405525970092	E:/cppProj/GameShopPlatformClient/build/GameShopPlatformClient_autogen/timestamp_Debug	a898950da96ace42
-285	2799	7516405528420009	CMakeFiles/GameShopPlatformClient.dir/Debug/src/main.cpp.obj	e3cecc5e748ef4c1
-40	284	7516405525970092	E:/cppProj/GameShopPlatformClient/build/GameShopPlatformClient_autogen/mocs_compilation_Debug.cpp	a898950da96ace42
-315	2745	7516405528710000	CMakeFiles/GameShopPlatformClient.dir/Debug/src/authorization.cpp.obj	e9c93eea89a04b60
-2799	3112	7516405553556951	Debug/GameShopPlatformClient.exe	ea9e544da6a78f99

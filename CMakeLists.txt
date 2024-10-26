@@ -14,6 +14,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 find_package(Qt6 REQUIRED COMPONENTS Widgets)
 find_package(Qt6 REQUIRED COMPONENTS Core)
 find_package(Qt6 REQUIRED COMPONENTS Gui)
+find_package(Qt6 REQUIRED COMPONENTS Network)
 
 # Пути к исходникам и заголовкам
 set(SOURCES
@@ -26,4 +27,4 @@ set(SOURCES
 add_executable(GameShopPlatformClient ${SOURCES})
 
 # Линкуем с библиотеками Qt
-target_link_libraries(GameShopPlatformClient Qt6::Widgets Qt6::Core Qt6::Gui)
+target_link_libraries(GameShopPlatformClient Qt6::Widgets Qt6::Core Qt6::Gui Qt6::Network)

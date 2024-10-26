@@ -41,6 +41,8 @@ private:
 
     void sendLoginForm();
     void sendRegistrationForm();
+
+    void saveToken(QString token);
 };
 
 #endif

@@ -1,4 +1,7 @@
 #include "../includes/authorization.h"
+#include <QJsonObject>
+#include <QJsonDocument>
+#include <QNetworkReply>
 
 Authorization::Authorization(QWidget *parent) : QDialog(parent) {
     this->setFixedSize(800,500);
@@ -57,11 +60,55 @@ void Authorization::switchToRegistrationForm() {
 }
 
 void Authorization::sendLoginForm() {
+    confirmButton->setEnabled(false);
 
+    QString login = loginLine->text();
+    QString password = passwordLine->text();
+    
+    QUrl url("http://localhost:8080/auth/sign-in");
+    QNetworkRequest request(url);
+    request.setHeader(QNetworkRequest::ContentTypeHeader, "application/x-www-form-urlencoded");
+
+    QJsonObject jsonData;
+    jsonData["email"] = login;
+    jsonData["password"] = password;
+
+    QJsonDocument jsonDoc(jsonData);
+    QByteArray byteArr = jsonDoc.toJson();
+
+    QNetworkReply *reply = networkManager->post(request, byteArr);
+
+    connect(reply, &QNetworkReply::finished, this, [this]() {
+        QNetworkReply *reply = qobject_cast<QNetworkReply *>(sender());
+        if (reply->error() == QNetworkReply::NoError) {
+            QByteArray responseData = reply->readAll();
+
+            QJsonDocument jsonResponse = QJsonDocument::fromJson(responseData);
+            if (jsonResponse.isObject()) {
+                QJsonObject jsonObject = jsonResponse.object();
+                QString token = jsonObject["token"].toString();
+
+                saveToken(token);
+
+                this->close();
+
+                // MainWindow *mainWindow = new MainWindow(); // New Window
+                // mainWindow->show();
+            }
+        } else {
+            qDebug() << "Error:" << reply->errorString();
+            confirmButton->setEnabled(true);
+        }
+        reply->deleteLater();
+    });
 }
 
 void Authorization::sendRegistrationForm() {
 
+}
+
+void Authorization::saveToken(QString token) {
+    //Сохранить токен, но где? :D
 }
 
 Authorization::~Authorization() {

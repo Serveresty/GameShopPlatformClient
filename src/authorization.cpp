@@ -48,7 +48,20 @@ Authorization::Authorization(QWidget *parent) : QDialog(parent) {
     connect(confirmButton, &QPushButton::clicked, this, &Authorization::sendLoginForm);
 }
 
+void Authorization::switchToLoginForm() {
+
+}
+
+void Authorization::switchToRegistrationForm() {
+
+}
+
 void Authorization::sendLoginForm() {
+
+}
+
+void Authorization::sendRegistrationForm() {
+
 }
 
 Authorization::~Authorization() {

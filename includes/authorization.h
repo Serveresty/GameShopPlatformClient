@@ -36,7 +36,11 @@ private:
 
     QNetworkAccessManager *networkManager;
 
+    void switchToLoginForm();
+    void switchToRegistrationForm();
+
     void sendLoginForm();
+    void sendRegistrationForm();
 };
 
 #endif

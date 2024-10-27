@@ -200,8 +200,8 @@ void Authorization::sendLoginForm() {
 
                 this->close();
 
-                // MainWindow *mainWindow = new MainWindow(); // New Window
-                // mainWindow->show();
+                ContentWindow *contentWindow = new ContentWindow();
+                contentWindow->show();
             }
         } else {
             qDebug() << "Error:" << reply->errorString();

@@ -9,6 +9,7 @@
 #include <QLineEdit>
 #include <QPushButton>
 #include <QNetworkAccessManager>
+#include "contentwindow.h"
 
 class Authorization : public QDialog {
 

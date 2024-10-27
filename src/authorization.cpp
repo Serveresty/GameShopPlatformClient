@@ -2,13 +2,41 @@
 #include <QJsonObject>
 #include <QJsonDocument>
 #include <QNetworkReply>
+#include <QDebug>
 
 Authorization::Authorization(QWidget *parent) : QDialog(parent) {
     this->setFixedSize(800,500);
 
-    mainLayout = new QVBoxLayout;
-    mainLayout->setSpacing(30);
-    mainLayout->addStretch(1);
+    stackedWidget = new QStackedWidget(this);
+
+    loginWidget = createLoginForm();
+    registrationWidget = createRegistrationForm();
+
+    stackedWidget->addWidget(loginWidget);
+    stackedWidget->addWidget(registrationWidget);
+
+    mainLayout = new QVBoxLayout(this);
+    mainLayout->addWidget(stackedWidget);
+
+    setLayout(mainLayout);    
+
+    networkManager = new QNetworkAccessManager(this);
+}
+
+QWidget* Authorization::createLoginForm() {
+    QWidget *page = new QWidget;
+    QVBoxLayout *layout = new QVBoxLayout;
+
+    layout = new QVBoxLayout;
+    layout->setSpacing(30);
+    layout->addStretch(1);
+
+    logoLogLayout = new QVBoxLayout;
+    logoLogLabel = new QLabel("Login");
+    logoLogLabel->setStyleSheet("font-size: 20px; font-weight: bold;");
+    logoLogLayout->setAlignment(Qt::AlignCenter);
+    logoLogLayout->setSpacing(0);
+    logoLogLayout->addWidget(logoLogLabel);
 
     loginLayout = new QVBoxLayout;
     loginLabel = new QLabel("Email");
@@ -23,6 +51,7 @@ Authorization::Authorization(QWidget *parent) : QDialog(parent) {
     passwordLayout = new QVBoxLayout;
     passwordLabel = new QLabel("Password");
     passwordLine = new QLineEdit;
+    passwordLine->setEchoMode(QLineEdit::Password);
     passwordLine->setFixedWidth(380);
     passwordLine->setFixedHeight(40);
     passwordLayout->setAlignment(Qt::AlignCenter);
@@ -37,26 +66,105 @@ Authorization::Authorization(QWidget *parent) : QDialog(parent) {
     confirmLayout->setAlignment(Qt::AlignCenter);
     confirmLayout->setSpacing(0);
     confirmLayout->addWidget(confirmButton);
+
+    redirectToRegLayout = new QVBoxLayout;
+    toReg = new QLabel("<a href='#'>Create account</a>");
+    toReg->setTextInteractionFlags(Qt::TextBrowserInteraction);
+    toReg->setFixedWidth(80);
+    redirectToRegLayout->addWidget(toReg);
     
-    mainLayout->addLayout(loginLayout);
-    mainLayout->addLayout(passwordLayout);
-    mainLayout->addLayout(confirmLayout);
+    layout->addLayout(logoLogLayout);
+    layout->addLayout(loginLayout);
+    layout->addLayout(passwordLayout);
+    layout->addLayout(confirmLayout);
+    layout->addLayout(redirectToRegLayout);
 
-    mainLayout->addStretch(1);
+    layout->addStretch(1);
 
-    this->setLayout(mainLayout);
-
-    networkManager = new QNetworkAccessManager(this);
+    page->setLayout(layout);
 
     connect(confirmButton, &QPushButton::clicked, this, &Authorization::sendLoginForm);
+    connect(toReg, &QLabel::linkActivated, this, [this]() {
+        stackedWidget->setCurrentIndex(1);
+    });
+
+    return page;
 }
 
-void Authorization::switchToLoginForm() {
+QWidget* Authorization::createRegistrationForm() {
+    QWidget *page = new QWidget;
+    QVBoxLayout *layout = new QVBoxLayout;
 
-}
+    layout = new QVBoxLayout;
+    layout->setSpacing(30);
+    layout->addStretch(1);
 
-void Authorization::switchToRegistrationForm() {
+    logoRegLayout = new QVBoxLayout;
+    logoRegLabel = new QLabel("Registration");
+    logoRegLabel->setStyleSheet("font-size: 20px; font-weight: bold;");
+    logoRegLayout->setAlignment(Qt::AlignCenter);
+    logoRegLayout->setSpacing(0);
+    logoRegLayout->addWidget(logoRegLabel);
 
+    loginRegLayout = new QVBoxLayout;
+    loginRegLabel = new QLabel("Email");
+    loginRegLine = new QLineEdit;
+    loginRegLine->setFixedWidth(380);
+    loginRegLine->setFixedHeight(40);
+    loginRegLayout->setAlignment(Qt::AlignCenter);
+    loginRegLayout->setSpacing(0);
+    loginRegLayout->addWidget(loginRegLabel);
+    loginRegLayout->addWidget(loginRegLine);
+
+    passwordRegLayout = new QVBoxLayout;
+    passwordRegLabel = new QLabel("Password");
+    passwordRegLine = new QLineEdit;
+    passwordRegLine->setEchoMode(QLineEdit::Password);
+    passwordRegLine->setFixedWidth(380);
+    passwordRegLine->setFixedHeight(40);
+    passwordConfRegLabel = new QLabel("Confirm password");
+    passwordConfRegLine = new QLineEdit;
+    passwordConfRegLine->setEchoMode(QLineEdit::Password);
+    passwordConfRegLine->setFixedWidth(380);
+    passwordConfRegLine->setFixedHeight(40);
+    passwordRegLayout->setAlignment(Qt::AlignCenter);
+    passwordRegLayout->setSpacing(0);
+    passwordConfRegLabel->setContentsMargins(0,30,0,0);
+    passwordRegLayout->addWidget(passwordRegLabel);
+    passwordRegLayout->addWidget(passwordRegLine);
+    passwordRegLayout->addWidget(passwordConfRegLabel);
+    passwordRegLayout->addWidget(passwordConfRegLine);
+
+    confirmRegLayout = new QVBoxLayout;
+    confirmRegButton = new QPushButton("Registration");
+    confirmRegButton->setFixedWidth(220);
+    confirmRegButton->setFixedHeight(40);
+    confirmRegLayout->setAlignment(Qt::AlignCenter);
+    confirmRegLayout->setSpacing(0);
+    confirmRegLayout->addWidget(confirmRegButton);
+
+    redirectToLogLayout = new QVBoxLayout;
+    toLog = new QLabel("<a href='#'>Already have an account</a>");
+    toLog->setTextInteractionFlags(Qt::TextBrowserInteraction);
+    toLog->setFixedWidth(130);
+    redirectToLogLayout->addWidget(toLog);
+    
+    layout->addLayout(logoRegLayout);
+    layout->addLayout(loginRegLayout);
+    layout->addLayout(passwordRegLayout);
+    layout->addLayout(confirmRegLayout);
+    layout->addLayout(redirectToLogLayout);
+
+    layout->addStretch(1);
+
+    page->setLayout(layout);
+
+    connect(confirmRegButton, &QPushButton::clicked, this, &Authorization::sendRegistrationForm);
+    connect(toLog, &QLabel::linkActivated, this, [this]() {
+        stackedWidget->setCurrentIndex(0);
+    });
+
+    return page;
 }
 
 void Authorization::sendLoginForm() {
@@ -104,7 +212,10 @@ void Authorization::sendLoginForm() {
 }
 
 void Authorization::sendRegistrationForm() {
+    // confirmRegButton->setEnabled(false);
 
+    QString login = loginRegLine->text();
+    QString password = passwordRegLine->text();
 }
 
 void Authorization::saveToken(QString token) {

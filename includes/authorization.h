@@ -17,11 +17,19 @@ class Authorization : public QDialog {
 public:
     explicit Authorization(QWidget *parent = nullptr);
     ~Authorization();
+private slots:
+    void sendLoginForm();
+    void sendRegistrationForm();
 private:
-    QStackedWidget *loginWidget;
-    QStackedWidget *registrationWidget;
+    QStackedWidget *stackedWidget;
+    QWidget *loginWidget;
+    QWidget *registrationWidget;
 
     QVBoxLayout *mainLayout;
+
+    //Login page data
+    QVBoxLayout *logoLogLayout;
+    QLabel *logoLogLabel;
 
     QVBoxLayout *loginLayout;
     QLabel *loginLabel;
@@ -34,13 +42,34 @@ private:
     QVBoxLayout *confirmLayout;
     QPushButton *confirmButton;
 
+    QVBoxLayout *redirectToRegLayout;
+    QLabel *toReg;
+
+    //Registration page data
+    QVBoxLayout *logoRegLayout;
+    QLabel *logoRegLabel;
+
+    QVBoxLayout *loginRegLayout;
+    QLabel *loginRegLabel;
+    QLineEdit *loginRegLine;
+
+    QVBoxLayout *passwordRegLayout;
+    QLabel *passwordRegLabel;
+    QLineEdit *passwordRegLine;
+    QLabel *passwordConfRegLabel;
+    QLineEdit *passwordConfRegLine;
+
+    QVBoxLayout *confirmRegLayout;
+    QPushButton *confirmRegButton;
+
+    QVBoxLayout *redirectToLogLayout;
+    QLabel *toLog;
+
+    //Network
     QNetworkAccessManager *networkManager;
 
-    void switchToLoginForm();
-    void switchToRegistrationForm();
-
-    void sendLoginForm();
-    void sendRegistrationForm();
+    QWidget* createLoginForm();
+    QWidget* createRegistrationForm();
 
     void saveToken(QString token);
 };
